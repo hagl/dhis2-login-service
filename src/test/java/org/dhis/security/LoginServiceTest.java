@@ -11,6 +11,7 @@ public class LoginServiceTest
 
     private static final User TEST_USER = new User("John");
     private static final AuthenticationEvent TEST_AUTHENTICATION_EVENT = new AuthenticationEvent(TEST_USER.getUsername());
+
     @Before
     public void before()
     {
@@ -32,7 +33,6 @@ public class LoginServiceTest
         }
         Assert.assertFalse("User should be blocked after 5 failures", loginService.isBlocked(TEST_USER));
     }
-
 
     @Test
     public void testFailureCounterIsReset()

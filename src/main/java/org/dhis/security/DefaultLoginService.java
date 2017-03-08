@@ -1,8 +1,8 @@
 package org.dhis.security;
 
-import com.github.benmanes.caffeine.cache.Caffeine;
 import org.dhis.user.User;
 
+import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 
 import java.util.concurrent.TimeUnit;
@@ -35,6 +35,7 @@ public class DefaultLoginService
     @Override
     public void registerAuthenticationSuccess( AuthenticationEvent event )
     {
+        // reset the attempts by invalidating the cache entry
         USERNAME_LOGIN_ATTEMPTS_CACHE.invalidate(event.getUsername());
     }
 
