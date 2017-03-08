@@ -10,6 +10,17 @@ import java.util.concurrent.TimeUnit;
 public class DefaultLoginService
     implements LoginService
 {
+
+    /**
+     * The maximum numbers a user can have failed login attempts in a timespan.
+     */
+    private static final int LOGIN_ATTEMPTS_LIMIT = 5;
+
+    /**
+     *  The timespan in hours that is considered for login attempts.
+     */
+    private static final int ATTEMPTS_TIMESPAN_HOURS = 1;
+
     /**
      * Cache for login attempts where usernames are keys and login attempts are values.
      * Entries expire after 1 hour after the last write to reset the login attempts.
@@ -22,7 +33,7 @@ public class DefaultLoginService
      *    keeps track of the timestamps of the login attempts</li></ul>
      */
     private final LoadingCache<String, Integer> USERNAME_LOGIN_ATTEMPTS_CACHE =
-            Caffeine.newBuilder().expireAfterWrite(1, TimeUnit.HOURS).build(username -> 0);
+            Caffeine.newBuilder().expireAfterWrite(ATTEMPTS_TIMESPAN_HOURS, TimeUnit.HOURS).build(username -> 0);
 
     @Override
     public void registerAuthenticationFailure( AuthenticationEvent event )
@@ -42,6 +53,6 @@ public class DefaultLoginService
     @Override
     public boolean isBlocked( User user )
     {
-        return USERNAME_LOGIN_ATTEMPTS_CACHE.get(user.getUsername()) < 5;
+        return USERNAME_LOGIN_ATTEMPTS_CACHE.get(user.getUsername()) < LOGIN_ATTEMPTS_LIMIT;
     }
 }
