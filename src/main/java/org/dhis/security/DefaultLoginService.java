@@ -14,7 +14,7 @@ public class DefaultLoginService
     /**
      * The maximum numbers a user can have failed login attempts in a timespan.
      */
-    private static final int LOGIN_ATTEMPTS_LIMIT = 5;
+    protected static final int LOGIN_ATTEMPTS_LIMIT = 5;
 
     /**
      *  The timespan in hours that is considered for login attempts.

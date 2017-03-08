@@ -5,6 +5,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.dhis.security.DefaultLoginService.LOGIN_ATTEMPTS_LIMIT;
+
 public class LoginServiceTest
 {
     private LoginService loginService;
@@ -27,17 +29,17 @@ public class LoginServiceTest
     @Test
     public void testLoginBlockedAfter5Failures()
     {
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < LOGIN_ATTEMPTS_LIMIT; i++)
         {
             loginService.registerAuthenticationFailure(TEST_AUTHENTICATION_EVENT);
         }
-        Assert.assertFalse("User should be blocked after 5 failures", loginService.isBlocked(TEST_USER));
+        Assert.assertFalse("User should be blocked after " + LOGIN_ATTEMPTS_LIMIT +" failures", loginService.isBlocked(TEST_USER));
     }
 
     @Test
     public void testFailureCounterIsReset()
     {
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < LOGIN_ATTEMPTS_LIMIT - 1; i++)
         {
             loginService.registerAuthenticationFailure(TEST_AUTHENTICATION_EVENT);
         }
